@@ -1,0 +1,127 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Tahoma, Geneva, sans-serif; background: linear-gradient(180deg, #a0d8ff 0%, #4fa3ff 100%); min-height: 100vh; display: flex; flex-direction: column; }
+.container { width: 100%; padding: 2rem; margin: auto; }
+@media (min-width: 768px) { .container { max-width: 1320px; } }
+
+/* Fenêtres XP */
+.xp-window { border: 2px solid #000080; border-radius: 4px; box-shadow: 4px 4px 0 rgba(0,0,0,0.5); background: #c3d9ff; margin-bottom: 2rem; position: relative; width: 100%; transition: all .2s ease; }
+.xp-window.maximized { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); width: 94vw; height: 86vh; z-index: 1000; margin: 0; }
+.titlebar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #0f4d92, #3a6ea5); padding: 4px 8px; color: #fff; font-weight: bold; height: 32px; user-select: none; cursor: move; }
+.title-text { font-size: 1.2rem; }
+.controls { display: flex; gap: 6px; }
+.control-btn { position: relative; width: 22px; height: 20px; border: 1px solid #fff; padding: 0; background: none; cursor: pointer; }
+.control-btn.minimize { background: #3a6ea5; }
+.control-btn.minimize::before { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 10px; height: 2px; background: #fff; }
+.control-btn.maximize { background: #3a6ea5; }
+.control-btn.maximize::before { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 10px; height: 8px; border: 2px solid #fff; }
+.control-btn.close { background: #e81123; }
+.control-btn.close::before { content: '×'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 14px; line-height: 14px; font-weight: bold; }
+.control-btn:hover { filter: brightness(1.2); }
+
+/* Moins de padding pour le contenu */
+.window-content { padding: 4px; overflow: auto; height: calc(100% - 32px); }
+
+.profile {
+    text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  
+  /* (1) your avatar + white “groove” */
+  .avatar {
+    display: block;            /* so margin auto can center */
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 4px groove #fff;
+    border-radius: 6px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;                /* sit above the gradient frame */
+  }
+  
+  /* (2) gradient frame behind the avatar */
+  .msn-frame {
+    display: block;            /* turn the span into a block */
+    position: absolute;
+    top:    -6px;              /* pull out by the frame thickness */
+    left:   -6px;
+    width:  calc(100% + 12px);
+    height: calc(100% + 12px);
+    pointer-events: none;
+    border-radius: 16px;       /* 6px avatar-radius + 4px groove + 6px frame */
+    background: linear-gradient(
+      to bottom,
+      #CCCCCC  0%,
+      #777777 100%
+    );
+    z-index: 0;                /* behind the avatar */
+    transition: background .3s;
+  }
+  
+  /* (3) when live, just swap the background */
+  .profile.online .msn-frame {
+    background: linear-gradient(
+      to bottom,
+      #C8FF7A 0%,
+      #38C400 100%
+    );
+  }
+    
+  /* NOW the real gradient borders: */
+  .profile.offline .msn-frame {
+    border-image-source:
+      linear-gradient(to bottom, #CCCCCC 0%, #777777 100%);
+  }
+  .profile.online .msn-frame {
+    border-image-source:
+      linear-gradient(to bottom, #C8FF7A 0%, #38C400 100%);
+  }
+  
+  
+
+.msn-status { margin-top: 0.5rem; padding: 4px 8px; background: #fff; border: 2px solid #ccc; border-radius: 4px; display: inline-block; }
+.msn-status span { font-size: 1rem; color: #555; }
+
+.links { display: flex; flex-direction: column; gap: 1.1rem; }
+.separator { height: 2px; background: #888; width: 100%; margin: 2rem 0; }
+.link-card { background: #e5ecf9; color: #000080; padding: 1.1rem 1.4rem; border: 2px outset #a0c4f0; border-radius: 6px; box-shadow: 2px 2px 0 #888; display: flex; align-items: center; position: relative; cursor: pointer; transition: transform .1s; }
+.link-card:hover { transform: translateY(-2px); border-color: #8abce6; }
+.link-card .text { flex: 1; text-align: center; font-size: 1.15rem; text-shadow: 1px 1px #fff; }
+.link-card .menu { position: absolute; right: .8rem; font-size: 1.2rem; color: #000; }
+
+.taskbar { position: fixed; bottom: 0; left: 0; width: 100%; height: 42px; background: #0e2e8a; display: flex; align-items: center; padding: 0 8px; gap: 8px; box-shadow: 0 -2px 6px rgba(0,0,0,.4); }
+.taskbar-btn { background: #c3d9ff; border: 2px outset #a0c4f0; padding: 4px 10px; font-size: .95rem; color: #000080; cursor: pointer; max-width: 180px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.taskbar-btn:hover { background: #e5ecf9; }
+
+#sentinel { height: 1px; }
+.broken-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity .3s ease; z-index: 2000; }
+.broken-overlay.visible { opacity: 1; visibility: visible; }
+.broken-message { background: #c3d9ff; border: 2px solid #000080; padding: 2rem; border-radius: 6px; color: #000080; font-size: 1.2rem; text-align: center; max-width: 90%; }
+
+/* 16∶9 for thumbnail */
+.vod-video {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 9/16 = 0.5625 → 56.25% */
+    overflow: hidden;
+  }
+  .vod-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+/* extra padding top/bottom inside the “Mes Liens” window */
+#win-links .window-content {
+    padding: 3rem 6rem;
+}  

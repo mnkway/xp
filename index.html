@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon lien – Retro XP</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Fenêtre XP : Liens principaux -->
+    <div class="xp-window" id="win-links" data-title="Mes Liens">
+      <div class="titlebar">
+        <span class="title-text">Mes Liens</span>
+        <div class="controls">
+          <button class="control-btn minimize" aria-label="Minimiser"></button>
+          <button class="control-btn maximize" aria-label="Maximiser"></button>
+          <button class="control-btn close" aria-label="Fermer"></button>
+        </div>
+      </div>
+      <div class="window-content">
+        <header class="profile offline">
+          <div class="avatar-wrapper">
+            <img src="images/mnkwayplop.jpg" alt="Avatar" class="avatar">
+            <span class="msn-frame"></span>
+          </div>
+          <h1 class="username">Mnkway</h1>
+          <div class="msn-status"><span id="stream-text">Pas en Stream</span></div>
+        </header>
+        <div class="links primary">
+          <div class="link-card" data-link="mon-pc"><span class="text">Mon PC</span><span class="menu">⋮</span></div>
+          <div class="link-card" data-link="instagram"><span class="text">Instagram</span><span class="menu">⋮</span></div>
+          <div class="link-card" data-link="twitter"><span class="text">Twitter</span><span class="menu">⋮</span></div>
+          <div class="link-card" data-link="chaine-vod"><span class="text">Chaîne VOD</span><span class="menu">⋮</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="separator" id="separator"></div>
+
+    <!-- Fenêtre XP : Jeux -->
+    <div class="xp-window" id="win-jeux" data-title="Jeux">
+      <div class="titlebar">
+        <span class="title-text">Jeux</span>
+        <div class="controls">
+          <button class="control-btn minimize" aria-label="Minimiser"></button>
+          <button class="control-btn maximize" aria-label="Maximiser"></button>
+          <button class="control-btn close" aria-label="Fermer"></button>
+        </div>
+      </div>
+      <div class="window-content">
+        <div class="links jeux" id="jeux-list"></div>
+        <div id="sentinel"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="broken-overlay" class="broken-overlay">
+    <div class="broken-message">
+      Benêt ! T'as cassé le site.<br>
+      Clique <a href="#" id="reset-link">ICI</a> pour remettre tout à sa place
+      ou tente un Konami code je sais pas je suis pas là pour te donner des ordres.
+    </div>
+  </div>
+
+  <div id="taskbar" class="taskbar"></div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+let zTop = 1000;
+
+function updateSeparator() {
+  const sep = document.getElementById('separator');
+  if (!sep) return;
+  const wins = Array.from(document.querySelectorAll('.xp-window'));
+  const visible = wins.filter(w => getComputedStyle(w).display !== 'none');
+  sep.style.display = visible.length > 1 ? 'block' : 'none';
+  if (wins.length === 0) showBrokenOverlay();
+  else hideBrokenOverlay();
+}
+
+function hideBrokenOverlay() {
+  document.getElementById('broken-overlay').classList.remove('visible');
+}
+
+function showBrokenOverlay() {
+  document.getElementById('broken-overlay').classList.add('visible');
+}
+
+function setupWindow(win) {
+  const title = win.dataset.title || 'Fenêtre';
+  const btnMin = win.querySelector('.minimize');
+  const btnMax = win.querySelector('.maximize');
+  const btnClose = win.querySelector('.close');
+  let isMax = false;
+
+  function bringToFront() {
+    zTop++;
+    win.style.zIndex = zTop;
+  }
+  win.addEventListener('mousedown', bringToFront);
+
+  btnMax.addEventListener('click', e => {
+    e.stopPropagation();
+    isMax = !isMax;
+    win.classList.toggle('maximized', isMax);
+    btnMax.textContent = isMax ? '❐' : '☐';
+    bringToFront();
+  });
+
+  btnClose.addEventListener('click', e => {
+    e.stopPropagation();
+    win.remove();
+    updateSeparator();
+  });
+
+  btnMin.addEventListener('click', e => {
+    e.stopPropagation();
+    win.style.display = 'none';
+    const tb = document.getElementById('taskbar');
+    const taskBtn = document.createElement('button');
+    taskBtn.className = 'taskbar-btn';
+    taskBtn.textContent = title;
+    taskBtn.addEventListener('click', () => {
+      win.style.display = '';
+      bringToFront();
+      taskBtn.remove();
+      updateSeparator();
+    });
+    tb.appendChild(taskBtn);
+    updateSeparator();
+  });
+}
+
+document.querySelectorAll('.xp-window').forEach(setupWindow);
+
+// Reset overlay click
+const resetLink = document.getElementById('reset-link');
+if (resetLink) {
+  resetLink.addEventListener('click', e => {
+    e.preventDefault();
+    window.location.reload();
+  });
+}
+
+// Twitch status check (replace placeholders)
+const clientId    = 'YOUR_CLIENT_ID';
+const accessToken = 'YOUR_OAUTH_TOKEN';
+const user        = 'mnkway';
+const profileEl   = document.querySelector('.profile');
+const statusText  = document.getElementById('stream-text');
+
+async function checkStream() {
+  const res = await fetch(
+    `https://api.twitch.tv/helix/streams?user_login=${user}`, {
+      headers: {
+        'Client-ID': clientId,
+        'Authorization': `Bearer ${accessToken}`
+      }
+    }
+  );
+  const json = await res.json();
+  if (json.data && json.data.length) {
+    profileEl.classList.replace('offline', 'online');
+    statusText.textContent = 'En Stream';
+  } else {
+    profileEl.classList.replace('online', 'offline');
+    statusText.textContent = 'Pas en Stream';
+  }
+}
+
+// Check on load + every 1 minute
+checkStream();
+setInterval(checkStream, 60_000);
+
+// Links & lazy-load jeux
+const primaryCards = document.querySelectorAll('.links.primary .link-card');
+primaryCards.forEach(c => {
+  c.addEventListener('click', goToLink);
+  c.querySelector('.menu').addEventListener('click', e => e.stopPropagation());
+});
+
+function goToLink() {
+    const dest = this.dataset.link;
+  
+    if (dest.startsWith('jeux/')) {
+      // game slug is the folder name after "jeux/"
+      const slug = dest.split('/')[1];
+      // route to /<slug>/game.html
+      window.location.href = `/${slug}/game.html`;
+    } else {
+      // everything else stays at root, e.g. /instagram
+      window.location.href = `/${dest}`;
+    }
+  }  
+
+  async function autoLoadJeux() {
+    const container = document.getElementById('jeux-list');
+    const sentinel  = document.getElementById('sentinel');
+  
+    // 1) Fetch the list of sub-folders under /jeux via GitHub’s REST API
+    //    Replace these with your actual GitHub user/org and repo:
+    const owner = 'mnkway';
+    const repo  = 'retro-xp';
+    const res   = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/jeux`, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      })
+    const items = await res.json();
+    // Filter only directories, extracting their names:
+    const jeux  = items
+      .filter(item => item.type === 'dir')
+      .map(item  => item.name);
+  
+    let idx = 0;
+    const batchSize = 1;
+  
+    // 2) Set up an IntersectionObserver to lazy-load one game card at a time
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+  
+        // Add up to batchSize new cards
+        for (let i = 0; i < batchSize && idx < jeux.length; i++, idx++) {
+          const slug  = jeux[idx];
+          // Label: preserve slug’s casing, turn "_" into " "
+          const label = slug.replace(/_/g, ' ');
+  
+          const card = document.createElement('div');
+          card.className = 'link-card';
+          card.dataset.link = `jeux/${slug}`;
+  
+          card.innerHTML = `
+            <span class="text">${label}</span>
+            <span class="menu">⋮</span>
+          `;
+          card.addEventListener('click', goToLink);
+          card.querySelector('.menu').addEventListener('click', e => e.stopPropagation());
+          container.appendChild(card);
+        }
+  
+        // Done loading all games? Stop observing.
+        if (idx >= jeux.length) observer.disconnect();
+      });
+    }, {
+      rootMargin: '0px 0px 200px'
+    });
+  
+    observer.observe(sentinel);
+  }
+  
+  // Kick it off on page load
+  autoLoadJeux();
+// Initial separator check
+updateSeparator();
