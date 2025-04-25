@@ -196,12 +196,12 @@ function goToLink() {
 
   /* Jeux entries → /jeux/Slug/game.html */
   if (dest.startsWith('jeux/')) {
-    window.location.href = `/${dest}/game.html`;
+    window.location.href = `${dest}/game.html`;
     return;
   }
 
   /* Default fallback */
-  window.location.href = `/${dest}`;
+  window.location.href = `dest}`;
 }
 
 /* ─────────────── Auto-populate jeux list ─────────────── */
