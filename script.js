@@ -237,8 +237,8 @@ async function autoLoadJeux() {
   const container = document.getElementById('jeux-list');
 
   // 1) Fetch directory listing from GitHub
-  const owner = 'mnkway';
-  const repo  = 'retro-xp';
+  const owner = 'tathanito';
+  const repo  = 'mnkway';
   const res   = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/jeux`, {
     headers: { 'Accept': 'application/vnd.github.v3+json' }
   });
