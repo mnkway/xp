@@ -4,9 +4,61 @@ body { font-family: Tahoma, Geneva, sans-serif; background: linear-gradient(180d
 @media (min-width: 768px) { .container { max-width: 1320px; } }
 
 /* Fenêtres XP */
-.xp-window { border: 2px solid #000080; border-radius: 4px; box-shadow: 4px 4px 0 rgba(0,0,0,0.5); background: #c3d9ff; margin-bottom: 2rem; position: relative; width: 100%; transition: all .2s ease; }
-.xp-window.maximized { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); width: 94vw; height: 86vh; z-index: 1000; margin: 0; }
-.titlebar { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #0f4d92, #3a6ea5); padding: 4px 8px; color: #fff; font-weight: bold; height: 32px; user-select: none; cursor: move; }
+.xp-window {
+  border: 2px solid #000080;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+  background: #c3d9ff;
+  margin-bottom: 2rem;
+  position: relative;
+  width: 100%;
+
+  /* only animate visual flair, not geometry */
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+
+/* Title‐bars default to no-drag */
+.titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #0f4d92, #3a6ea5);
+  padding: 4px 8px;
+  color: #fff;
+  font-weight: bold;
+  height: 32px;
+  user-select: none;
+  cursor: default;
+}
+
+/* Mon PC *is* draggable */
+#win-pc .titlebar {
+  cursor: move;
+}
+
+.xp-window.maximized {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 94vw;
+  height: 86vh;
+  z-index: 1000;
+  margin: 0;
+}
+
+.titlebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, #0f4d92, #3a6ea5);
+    padding: 4px 8px;
+    color: #fff;
+    font-weight: bold;
+    height: 32px;
+    user-select: none;
+    cursor: default;        /* ← was “move” */
+  }
 .title-text { font-size: 1.2rem; }
 .controls { display: flex; gap: 6px; }
 .control-btn { position: relative; width: 22px; height: 20px; border: 1px solid #fff; padding: 0; background: none; cursor: pointer; }
@@ -125,3 +177,57 @@ body { font-family: Tahoma, Geneva, sans-serif; background: linear-gradient(180d
 #win-links .window-content {
     padding: 3rem 6rem;
 }  
+
+
+.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .config-table th,
+  .config-table td {
+    border: 1px solid #888;
+    padding: 6px 8px;
+  }
+  .config-table th {
+    background: #e5ecf9;
+    text-align: left;
+  }
+  .config-table tr:nth-child(even) td {
+    background: #f7faff;
+  }
+  
+  /* Mon PC window floats above everything, smaller width */
+#win-pc {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    width: 400px;       /* narrower than full-width */
+    z-index: 2000;      /* ensure it starts on top */
+  }
+
+  
+  /* Fenêtres XP */
+  .xp-window {
+    border: 2px solid #000080;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+    background: #c3d9ff;
+    margin-bottom: 2rem;
+    position: relative;
+    width: 100%;
+  
+    /* Animate only visual flair – not geometry – for snappier drag/resize */
+    transition: box-shadow .2s ease, transform .2s ease;
+  }
+  
+  .xp-window.maximized { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); width: 94vw; height: 86vh; z-index: 1000; margin: 0; }
+  .controls { display: flex; gap: 6px; }
+  /* … everything below is unchanged … */
+  
+
+/* Mon PC popup is always 400px wide */
+#win-pc {
+    width: 400px;
+  }
+  

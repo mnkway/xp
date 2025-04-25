@@ -1,56 +1,124 @@
 let zTop = 1000;
 
+// ───────────────────────────────────────────────────────────
+// Helpers for broken-overlay & separator
 function updateSeparator() {
   const sep = document.getElementById('separator');
   if (!sep) return;
-  const wins = Array.from(document.querySelectorAll('.xp-window'));
+  const wins    = [...document.querySelectorAll('.xp-window')];
   const visible = wins.filter(w => getComputedStyle(w).display !== 'none');
   sep.style.display = visible.length > 1 ? 'block' : 'none';
-  if (wins.length === 0) showBrokenOverlay();
-  else hideBrokenOverlay();
+  visible.length === 0 ? showBrokenOverlay() : hideBrokenOverlay();
 }
-
-function hideBrokenOverlay() {
-  document.getElementById('broken-overlay').classList.remove('visible');
-}
-
-function showBrokenOverlay() {
-  document.getElementById('broken-overlay').classList.add('visible');
-}
+function hideBrokenOverlay() { document.getElementById('broken-overlay').classList.remove('visible'); }
+function showBrokenOverlay() { document.getElementById('broken-overlay').classList.add('visible'); }
+// ───────────────────────────────────────────────────────────
 
 function setupWindow(win) {
-  const title = win.dataset.title || 'Fenêtre';
-  const btnMin = win.querySelector('.minimize');
-  const btnMax = win.querySelector('.maximize');
+  const title    = win.dataset.title || 'Fenêtre';
+  const btnMin   = win.querySelector('.minimize');
+  const btnMax   = win.querySelector('.maximize');
   const btnClose = win.querySelector('.close');
-  let isMax = false;
+  const titlebar = win.querySelector('.titlebar');
 
+  // bring-to-front
   function bringToFront() {
-    zTop++;
-    win.style.zIndex = zTop;
+    win.style.zIndex = ++zTop;
   }
   win.addEventListener('mousedown', bringToFront);
+  win.bringToFront = bringToFront;
 
-  btnMax.addEventListener('click', e => {
-    e.stopPropagation();
-    isMax = !isMax;
-    win.classList.toggle('maximized', isMax);
-    btnMax.textContent = isMax ? '❐' : '☐';
+  // ─────────────── DRAGGING for Mon PC ────────────────────
+  if (win.id === 'win-pc') {
+    let isDragging = false,
+        dragOffsetX = 0,
+        dragOffsetY = 0;
+
+    titlebar.addEventListener('mousedown', e => {
+      if (e.button !== 0 || win.classList.contains('maximized')) return;
+      isDragging = true;
+      bringToFront();
+
+      // switch to absolute & lock to current spot
+      const rect = win.getBoundingClientRect();
+      win.style.position = 'absolute';
+      win.style.margin   = '0';
+      win.style.left     = rect.left + 'px';
+      win.style.top      = rect.top  + 'px';
+
+      dragOffsetX = e.clientX - rect.left;
+      dragOffsetY = e.clientY - rect.top;
+
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('mouseup',   stopDrag);
+      e.preventDefault();
+    });
+
+    function onDrag(e) {
+      if (!isDragging) return;
+      win.style.left = `${e.clientX - dragOffsetX}px`;
+      win.style.top  = `${e.clientY - dragOffsetY}px`;
+    }
+    function stopDrag() {
+      isDragging = false;
+      document.removeEventListener('mousemove', onDrag);
+      document.removeEventListener('mouseup',   stopDrag);
+    }
+  }
+
+  // ─────────────── RESIZING (unchanged) ───────────────────
+  let isResizing     = false,
+      resizeStartX   = 0,
+      resizeStartY   = 0,
+      startW         = 0,
+      startH         = 0;
+  const minW = 200, minH = 100;
+  const handle = document.createElement('div');
+  handle.className = 'resize-handle br';
+  win.appendChild(handle);
+
+  handle.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    isResizing = true;
     bringToFront();
+    const rect = win.getBoundingClientRect();
+    startW       = rect.width;
+    startH       = rect.height;
+    resizeStartX = e.clientX;
+    resizeStartY = e.clientY;
+    document.addEventListener('mousemove', onResize);
+    document.addEventListener('mouseup',   stopResize);
+    e.stopPropagation();
+    e.preventDefault();
   });
 
-  btnClose.addEventListener('click', e => {
+  function onResize(e) {
+    if (!isResizing) return;
+    const dx = e.clientX - resizeStartX;
+    const dy = e.clientY - resizeStartY;
+    win.style.width  = `${Math.max(minW, startW + dx)}px`;
+    win.style.height = `${Math.max(minH, startH + dy)}px`;
+  }
+  function stopResize() {
+    isResizing = false;
+    document.removeEventListener('mousemove', onResize);
+    document.removeEventListener('mouseup',   stopResize);
+  }
+
+  // ─────────────── WINDOW CONTROLS ────────────────────────
+  btnMax.addEventListener('click', e => {
     e.stopPropagation();
-    win.remove();
-    updateSeparator();
+    const isMax = win.classList.toggle('maximized');
+    btnMax.textContent = isMax ? '❐' : '☐';
+    bringToFront();
   });
 
   btnMin.addEventListener('click', e => {
     e.stopPropagation();
     win.style.display = 'none';
-    const tb = document.getElementById('taskbar');
+    const tb      = document.getElementById('taskbar');
     const taskBtn = document.createElement('button');
-    taskBtn.className = 'taskbar-btn';
+    taskBtn.className   = 'taskbar-btn';
     taskBtn.textContent = title;
     taskBtn.addEventListener('click', () => {
       win.style.display = '';
@@ -61,18 +129,28 @@ function setupWindow(win) {
     tb.appendChild(taskBtn);
     updateSeparator();
   });
-}
 
-document.querySelectorAll('.xp-window').forEach(setupWindow);
-
-// Reset overlay click
-const resetLink = document.getElementById('reset-link');
-if (resetLink) {
-  resetLink.addEventListener('click', e => {
-    e.preventDefault();
-    window.location.reload();
+  btnClose.addEventListener('click', e => {
+    e.stopPropagation();
+    if (win.id === 'win-pc') {
+      // just hide PC so it can be re-opened
+      win.style.display = 'none';
+    } else {
+      win.remove();
+    }
+    updateSeparator();
   });
 }
+
+// ───────────────────────────────────────────────────────────
+// Initialize all windows
+document.querySelectorAll('.xp-window').forEach(setupWindow);
+
+// overlay-reset
+document.getElementById('reset-link')?.addEventListener('click', e => {
+  e.preventDefault();
+  window.location.reload();
+});
 
 // Twitch status check (replace placeholders)
 const clientId    = 'YOUR_CLIENT_ID';
@@ -114,16 +192,38 @@ primaryCards.forEach(c => {
 function goToLink() {
     const dest = this.dataset.link;
   
+    if (dest === 'mon-pc') {
+      const pcWin = document.getElementById('win-pc');
+      if (!pcWin) return;
+      pcWin.style.display = '';
+      pcWin.bringToFront();
+      pcWin.style.position = 'absolute';
+  
+      pcWin.style.transition = 'none';   // <-- add this line if you dislike the slide
+  
+      requestAnimationFrame(() => {
+        const { width: w, height: h } = pcWin.getBoundingClientRect();
+        pcWin.style.left = `${(window.innerWidth  - w) / 2}px`;
+        pcWin.style.top  = `${(window.innerHeight - h) / 2}px`;
+      });
+  
+      if (!separatorHidden) {
+        document.getElementById('separator').style.display = 'none';
+        separatorHidden = true;
+      }
+      return;
+    }
+      
+  
+    // your existing logic for jeux/… and external links
     if (dest.startsWith('jeux/')) {
-      // game slug is the folder name after "jeux/"
       const slug = dest.split('/')[1];
-      // route to /<slug>/game.html
       window.location.href = `/${slug}/game.html`;
     } else {
-      // everything else stays at root, e.g. /instagram
       window.location.href = `/${dest}`;
     }
-  }  
+  }
+  
 
   async function autoLoadJeux() {
     const container = document.getElementById('jeux-list');
