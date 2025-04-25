@@ -16,9 +16,10 @@
         <div class="controls">
           <button class="control-btn minimize" aria-label="Minimiser"></button>
           <button class="control-btn maximize" aria-label="Maximiser"></button>
-          <button class="control-btn close" aria-label="Fermer"></button>
+          <button class="control-btn close"    aria-label="Fermer"></button>
         </div>
       </div>
+
       <div class="window-content">
         <header class="profile offline">
           <div class="avatar-wrapper">
@@ -28,14 +29,13 @@
           <h1 class="username">Mnkway</h1>
           <div class="msn-status"><span id="stream-text">Pas en Stream</span></div>
         </header>
+
         <div class="links primary">
           <div class="link-card" data-link="mon-pc"><span class="text">Mon PC</span><span class="menu">⋮</span></div>
           <div class="link-card" data-link="insta"><span class="text">Instagram</span><span class="menu">⋮</span></div>
           <div class="link-card" data-link="twitter"><span class="text">Twitter</span><span class="menu">⋮</span></div>
           <div class="link-card" data-link="chaine-vod"><span class="text">Chaîne VOD</span><span class="menu">⋮</span></div>
-          <div class="link-card" data-link="letterboxd"><span class="text">Letterboxd</span><span class="menu">⋮</span>
-          </div>
-          
+          <div class="link-card" data-link="letterboxd"><span class="text">Letterboxd</span><span class="menu">⋮</span></div>
         </div>
       </div>
     </div>
@@ -49,25 +49,38 @@
         <div class="controls">
           <button class="control-btn minimize" aria-label="Minimiser"></button>
           <button class="control-btn maximize" aria-label="Maximiser"></button>
-          <button class="control-btn close" aria-label="Fermer"></button>
+          <button class="control-btn close"    aria-label="Fermer"></button>
         </div>
       </div>
+
       <div class="window-content">
+        <!-- Recherche -->
+        <div class="search-container">
+          <input
+            type="text"
+            id="game-search"
+            placeholder="🔍 Rechercher un jeu…"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Liste de jeux -->
         <div class="links jeux" id="jeux-list"></div>
         <div id="sentinel"></div>
       </div>
     </div>
 
-    <!-- Fenêtre XP : Mon PC (now a sibling, never hidden by #win-jeux) -->
-    <div class="xp-window" id="win-pc" data-title="Mon PC" style="display: none;">
+    <!-- Fenêtre XP : Mon PC -->
+    <div class="xp-window" id="win-pc" data-title="Mon PC" style="display:none;">
       <div class="titlebar">
         <span class="title-text">Mon PC</span>
         <div class="controls">
           <button class="control-btn minimize" aria-label="Minimiser"></button>
           <button class="control-btn maximize" aria-label="Maximiser"></button>
-          <button class="control-btn close" aria-label="Fermer"></button>
+          <button class="control-btn close"    aria-label="Fermer"></button>
         </div>
       </div>
+
       <div class="window-content">
         <table class="config-table">
           <tr><th>GPU</th><td>MSI NVIDIA GeForce RTX 5080 16G Ventus 3X OC Plus</td></tr>
@@ -81,18 +94,17 @@
         </table>
       </div>
     </div>
-
   </div>
 
   <div id="broken-overlay" class="broken-overlay">
     <div class="broken-message">
       Benêt ! T'as cassé le site.<br>
       Clique <a href="#" id="reset-link">ICI</a> pour remettre tout à sa place
-      ou tente un Konami code je sais pas je suis pas là pour te donner des ordres.
+      ou tente un Konami code – je sais pas, je suis pas là pour te donner des ordres.
     </div>
   </div>
 
   <div id="taskbar" class="taskbar"></div>
-  <script src="script.js"></script>
+  <script type="module" src="./script.js"></script>
 </body>
 </html>

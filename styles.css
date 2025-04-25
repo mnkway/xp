@@ -71,7 +71,7 @@ body { font-family: Tahoma, Geneva, sans-serif; background: linear-gradient(180d
 .control-btn:hover { filter: brightness(1.2); }
 
 /* Moins de padding pour le contenu */
-.window-content { padding: 4px; overflow: auto; height: calc(100% - 32px); }
+.window-content {padding: 2rem 6rem; overflow: auto; height: calc(100% - 32px); }
 
 .profile {
     text-align: center;
@@ -231,3 +231,27 @@ body { font-family: Tahoma, Geneva, sans-serif; background: linear-gradient(180d
     width: 400px;
   }
   
+  .search-container {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  #game-search {
+    width: 70%;
+    padding: 4px 8px;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 1rem;
+    background: #e5ecf9;
+    border: 2px outset #a0c4f0;
+    border-radius: 4px;
+    box-shadow: 2px 2px 0 #888;
+    color: #000080;
+  }
+  #game-search:focus {
+    outline: none;
+    box-shadow: 1px 1px 0 #888 inset;
+  }
+  
+  /* Mon PC: smaller, custom padding */
+#win-pc .window-content {
+  padding: 1rem 1rem; 
+}
