@@ -10,8 +10,14 @@ function updateSeparator() {
   sep.style.display = visible.length > 1 ? 'block' : 'none';
   visible.length === 0 ? showBrokenOverlay() : hideBrokenOverlay();
 }
-function hideBrokenOverlay() { document.getElementById('broken-overlay').classList.remove('visible'); }
-function showBrokenOverlay() { document.getElementById('broken-overlay').classList.add('visible'); }
+function hideBrokenOverlay() { 
+  document.getElementById('broken-overlay')
+          .classList.remove('visible');
+}
+function showBrokenOverlay() { 
+  document.getElementById('broken-overlay')
+          .classList.add('visible');
+}
 // ───────────────────────────────────────────────────────────
 
 function setupWindow(win) {
@@ -66,7 +72,7 @@ function setupWindow(win) {
     }
   }
 
-  // ─────────────── RESIZING (unchanged) ───────────────────
+  // ─────────────── RESIZING ───────────────────────────────
   let isResizing     = false,
       resizeStartX   = 0,
       resizeStartY   = 0,
@@ -133,7 +139,6 @@ function setupWindow(win) {
   btnClose.addEventListener('click', e => {
     e.stopPropagation();
     if (win.id === 'win-pc') {
-      // just hide PC so it can be re-opened
       win.style.display = 'none';
     } else {
       win.remove();
@@ -146,13 +151,13 @@ function setupWindow(win) {
 // Initialize all windows
 document.querySelectorAll('.xp-window').forEach(setupWindow);
 
-// overlay-reset
+// Reset overlay on “broken” click
 document.getElementById('reset-link')?.addEventListener('click', e => {
   e.preventDefault();
   window.location.reload();
 });
 
-// Twitch status check (replace placeholders)
+// Twitch status check
 const clientId    = 'YOUR_CLIENT_ID';
 const accessToken = 'YOUR_OAUTH_TOKEN';
 const user        = 'mnkway';
@@ -177,12 +182,10 @@ async function checkStream() {
     statusText.textContent = 'Pas en Stream';
   }
 }
-
-// Check on load + every 1 minute
 checkStream();
 setInterval(checkStream, 60_000);
 
-// Links & lazy-load jeux
+// Link cards wiring
 const primaryCards = document.querySelectorAll('.links.primary .link-card');
 primaryCards.forEach(c => {
   c.addEventListener('click', goToLink);
@@ -190,96 +193,75 @@ primaryCards.forEach(c => {
 });
 
 function goToLink() {
-    const dest = this.dataset.link;
-  
-    if (dest === 'mon-pc') {
-      const pcWin = document.getElementById('win-pc');
-      if (!pcWin) return;
-      pcWin.style.display = '';
-      pcWin.bringToFront();
-      pcWin.style.position = 'absolute';
-  
-      pcWin.style.transition = 'none';   // <-- add this line if you dislike the slide
-  
-      requestAnimationFrame(() => {
-        const { width: w, height: h } = pcWin.getBoundingClientRect();
-        pcWin.style.left = `${(window.innerWidth  - w) / 2}px`;
-        pcWin.style.top  = `${(window.innerHeight - h) / 2}px`;
-      });
-  
-      if (!separatorHidden) {
-        document.getElementById('separator').style.display = 'none';
-        separatorHidden = true;
-      }
-      return;
-    }
-      
-  
-    // your existing logic for jeux/… and external links
-    if (dest.startsWith('jeux/')) {
-      const slug = dest.split('/')[1];
-      window.location.href = `/${slug}/game.html`;
-    } else {
-      window.location.href = `/${dest}`;
-    }
-  }
-  
+  const dest = this.dataset.link;
 
-  async function autoLoadJeux() {
-    const container = document.getElementById('jeux-list');
-    const sentinel  = document.getElementById('sentinel');
-  
-    // 1) Fetch the list of sub-folders under /jeux via GitHub’s REST API
-    //    Replace these with your actual GitHub user/org and repo:
-    const owner = 'mnkway';
-    const repo  = 'retro-xp';
-    const res   = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/jeux`, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
-      })
-    const items = await res.json();
-    // Filter only directories, extracting their names:
-    const jeux  = items
-      .filter(item => item.type === 'dir')
-      .map(item  => item.name);
-  
-    let idx = 0;
-    const batchSize = 1;
-  
-    // 2) Set up an IntersectionObserver to lazy-load one game card at a time
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-  
-        // Add up to batchSize new cards
-        for (let i = 0; i < batchSize && idx < jeux.length; i++, idx++) {
-          const slug  = jeux[idx];
-          // Label: preserve slug’s casing, turn "_" into " "
-          const label = slug.replace(/_/g, ' ');
-  
-          const card = document.createElement('div');
-          card.className = 'link-card';
-          card.dataset.link = `jeux/${slug}`;
-  
-          card.innerHTML = `
-            <span class="text">${label}</span>
-            <span class="menu">⋮</span>
-          `;
-          card.addEventListener('click', goToLink);
-          card.querySelector('.menu').addEventListener('click', e => e.stopPropagation());
-          container.appendChild(card);
-        }
-  
-        // Done loading all games? Stop observing.
-        if (idx >= jeux.length) observer.disconnect();
-      });
-    }, {
-      rootMargin: '0px 0px 200px'
+  // Mon PC popup
+  if (dest === 'mon-pc') {
+    const pcWin = document.getElementById('win-pc');
+    if (!pcWin) return;
+    pcWin.style.display = '';
+    pcWin.bringToFront();
+    pcWin.style.position = 'absolute';
+    pcWin.style.transition = 'none';
+    requestAnimationFrame(() => {
+      const { width: w, height: h } = pcWin.getBoundingClientRect();
+      pcWin.style.left = `${(window.innerWidth - w) / 2}px`;
+      pcWin.style.top  = `${(window.innerHeight - h) / 2}px`;
     });
-  
-    observer.observe(sentinel);
+    return;
   }
-  
-  // Kick it off on page load
-  autoLoadJeux();
-// Initial separator check
+
+  // External profile links
+  const urlMap = {
+    instagram:    'https://www.instagram.com/mnkway/',
+    twitter:      'https://x.com/MNKway_',
+    'chaine-vod': 'https://www.youtube.com/@mnkway/featured',
+    letterboxd:   'https://letterboxd.com/mnkway/'
+  };
+  if (urlMap[dest]) {
+    window.open(urlMap[dest], '_blank');
+    return;
+  }
+
+  // Jeux entries → /jeux/Slug/game.html
+  if (dest.startsWith('jeux/')) {
+    window.location.href = `/${dest}/game.html`;
+    return;
+  }
+
+  // Fallback for any other relative link
+  window.location.href = `/${dest}`;
+}
+
+async function autoLoadJeux() {
+  const container = document.getElementById('jeux-list');
+
+  // 1) Fetch directory listing from GitHub
+  const owner = 'mnkway';
+  const repo  = 'retro-xp';
+  const res   = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/jeux`, {
+    headers: { 'Accept': 'application/vnd.github.v3+json' }
+  });
+  const items = await res.json();
+
+  // 2) Filter for directories & append a card per game
+  const jeux = items
+    .filter(item => item.type === 'dir')
+    .map(item  => item.name);
+
+  jeux.forEach(slug => {
+    const label = slug.replace(/_/g, ' ');
+    const card  = document.createElement('div');
+    card.className    = 'link-card';
+    card.dataset.link = `jeux/${slug}`;
+    card.innerHTML    = `<span class="text">${label}</span><span class="menu">⋮</span>`;
+    card.addEventListener('click', goToLink);
+    card.querySelector('.menu')
+        .addEventListener('click', e => e.stopPropagation());
+    container.appendChild(card);
+  });
+}
+
+// Kick off & separator check
+autoLoadJeux();
 updateSeparator();
