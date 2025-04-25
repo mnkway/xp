@@ -213,7 +213,7 @@ function goToLink() {
 
   // External profile links
   const urlMap = {
-    instagram:    'https://www.instagram.com/mnkway/',
+    insta:    'https://www.instagram.com/mnkway/',
     twitter:      'https://x.com/MNKway_',
     'chaine-vod': 'https://www.youtube.com/@mnkway/featured',
     letterboxd:   'https://letterboxd.com/mnkway/'
