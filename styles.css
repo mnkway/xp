@@ -288,4 +288,13 @@ body{font-family:Tahoma, Geneva, sans-serif;
       height: auto;
     }
   }
-  
+
+/* Assurez-vous que votre élément a la classe .draggable */
+.draggable {
+  cursor: grab;           /* Curseur “prêt à saisir” au survol */
+}
+
+.draggable:active,
+.draggable.dragging {
+  cursor: grabbing;       /* Curseur “en train de saisir” pendant le drag */
+}
