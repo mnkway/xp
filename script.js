@@ -8,7 +8,7 @@ const gameSlugs = [
   'Resident_Evil',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
-  'Shenmue',
+  'Shenmue_I_et_II',
 /*  'Zelda_Skyward_Sword',
   'Resident_Evil_2',*/
 ];
