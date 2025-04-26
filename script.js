@@ -209,6 +209,7 @@ function goToLink() {
     twitter:      'https://x.com/MNKway_',
     'chaine-vod': 'https://www.youtube.com/@mnkway/featured',
     letterboxd:   'https://letterboxd.com/mnkway/',
+    Mangacollec:  'https://www.mangacollec.com/user/mnkway/collection',
   };
   if (urlMap[dest]) {
     window.open(urlMap[dest], '_blank');
