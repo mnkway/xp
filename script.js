@@ -2,15 +2,17 @@ let zTop = 1000;
 
 /* ─────────────── Jeux list ─────────────── */
 const gameSlugs = [
+//'Okami',  
   'Resident_Evil_2',
   'Ico',
-  'Zelda_Skyward_Sword',
+/*  'Zelda_Skyward_Sword',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarine_of_Time',
   'Shenmue',
   'Resident_Evil',
-  'Resident_Evil_0',
+  'Resident_Evil_0',*/
 ];
+
 
 /* ──────────────────────────────────────────
    Helpers for broken-overlay & separator
