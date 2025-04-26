@@ -294,3 +294,17 @@ body{font-family:Tahoma, Geneva, sans-serif;
 #win-pc   .titlebar {
   cursor: move;
 }
+
+/* ==== Twitch-link hover “pop” effect ==== */
+.twitch-link {
+  display: inline-block;       /* so transforms apply cleanly */
+  text-decoration: none;       /* no underline unless you want one */
+  color: inherit;              /* keep your current text color */
+  transition: transform 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.twitch-link:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
