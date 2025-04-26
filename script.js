@@ -3,14 +3,14 @@ let zTop = 1000;
 /* ─────────────── Jeux list ─────────────── */
 const gameSlugs = [
 //'Okami',  
-  'Resident_Evil_2',
   'Ico',
+  'Resident_Evil',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
 /*  'Zelda_Skyward_Sword',
   'Shenmue',
-  'Resident_Evil',
-  'Resident_Evil_0',*/
+  'Resident_Evil_0',
+  'Resident_Evil_2',*/
 ];
 
 
