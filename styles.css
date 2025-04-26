@@ -295,7 +295,7 @@ body{font-family:Tahoma, Geneva, sans-serif;
   cursor: move;
 }
 
-/* ==== Twitch-link hover “pop” effect ====
+/* ==== Twitch-link hover “pop” effect ====*/
 .twitch-link {
   display: inline-block;       
   text-decoration: none;      
@@ -307,4 +307,4 @@ body{font-family:Tahoma, Geneva, sans-serif;
 .twitch-link:hover {
   transform: scale(1.05);
   filter: brightness(1.2);
-}*/
+}
