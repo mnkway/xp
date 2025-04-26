@@ -4,12 +4,12 @@ let zTop = 1000;
 const gameSlugs = [
 //'Okami',  
   'Ico',
+  'Resident_Evil_0',
   'Resident_Evil',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
-/*  'Zelda_Skyward_Sword',
   'Shenmue',
-  'Resident_Evil_0',
+/*  'Zelda_Skyward_Sword',
   'Resident_Evil_2',*/
 ];
 
