@@ -139,29 +139,25 @@ function setupWindow(win) {
   });
 }
 
-/* ───────── Twitch status ───────── */
-const clientId    = 'YOUR_CLIENT_ID';
-const accessToken = 'YOUR_OAUTH_TOKEN';
-const userLogin   = 'mnkway';
-const profileEl   = document.querySelector('.profile');
-const statusText  = document.getElementById('stream-text');
-async function checkStream() {
+/* ───────── Twitch status (updaté) ───────── */
+const profileEl  = document.querySelector('.profile');
+const statusText = document.getElementById('stream-text');
+
+async function loadStatus() {
   try {
-    const res  = await fetch(`https://api.twitch.tv/helix/streams?user_login=${userLogin}`, {
-      headers: { 'Client-ID': clientId, 'Authorization': `Bearer ${accessToken}` }
-    });
-    const json = await res.json();
-    if (json.data?.length) {
-      profileEl.classList.replace('offline','online');
-      statusText.textContent = 'En Stream';
-    } else {
-      profileEl.classList.replace('online','offline');
-      statusText.textContent = 'Pas en Stream';
-    }
-  } catch {}
+    const res   = await fetch('./twitch-status.json?ts=' + Date.now());
+    const { online } = await res.json();
+    profileEl.classList.toggle('online',  online);
+    profileEl.classList.toggle('offline', !online);
+    statusText.textContent = online ? 'En Stream' : 'Pas en Stream';
+  } catch (e) {
+    console.warn('Could not load Twitch status', e);
+  }
 }
-checkStream();
-setInterval(checkStream, 60_000);
+
+loadStatus();
+setInterval(loadStatus, 60_000);
+
 
 /* ───────── Primary link cards ───────── */
 const primaryCards = document.querySelectorAll('.links.primary .link-card');
