@@ -211,7 +211,8 @@ function goToLink() {
     'chaine-vod': 'https://www.youtube.com/@mnkway/featured',
     letterboxd:   'https://letterboxd.com/mnkway/',
     mangacollec:  'https://www.mangacollec.com/user/mnkway/collection',
-    TikTok:       'https://www.tiktok.com/@devilmnkway',
+    tiktok:       'https://www.tiktok.com/@devilmnkway?is_from_webapp=1&sender_device=pc',
+    
   };
   if (urlMap[dest]) {
     window.open(urlMap[dest], '_blank');
