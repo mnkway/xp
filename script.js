@@ -51,18 +51,18 @@ function setupWindow(win) {
       const rect = win.getBoundingClientRect();
       win.style.position = 'absolute';
       win.style.margin   = '0';
-      win.style.left     = rect.left + 'px';
-      win.style.top      = rect.top  + 'px';
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
+      win.style.left     = rect.left + window.scrollX + 'px';
+      win.style.top      = rect.top  + window.scrollY + 'px';
+      offsetX = e.clientX + window.scrollX - (rect.left + window.scrollX);
+      offsetY = e.clientY + window.scrollY - (rect.top  + window.scrollY);
       document.addEventListener('mousemove', onDrag);
       document.addEventListener('mouseup',   stopDrag);
       e.preventDefault();
     });
     function onDrag(e) {
       if (!isDragging) return;
-      win.style.left = `${e.clientX - offsetX}px`;
-      win.style.top  = `${e.clientY - offsetY}px`;
+      win.style.left = `${e.clientX + window.scrollX - offsetX}px`;
+      win.style.top  = `${e.clientY + window.scrollY - offsetY}px`;
     }
     function stopDrag() {
       isDragging = false;
