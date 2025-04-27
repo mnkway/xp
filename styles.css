@@ -73,44 +73,30 @@ body{font-family:Tahoma, Geneva, sans-serif;
     z-index: 1;                /* sit above the gradient frame */
   }
   
-  /* (2) gradient frame behind the avatar */
-  .msn-frame {
-    display: block;            /* turn the span into a block */
-    position: absolute;
-    top:    -6px;              /* pull out by the frame thickness */
-    left:   -6px;
-    width:  calc(100% + 12px);
-    height: calc(100% + 12px);
-    pointer-events: none;
-    border-radius: 16px;       /* 6px avatar-radius + 4px groove + 6px frame */
-    background: linear-gradient(
-      to bottom,
-      #CCCCCC  0%,
-      #777777 100%
-    );
-    z-index: 0;                /* behind the avatar */
-    transition: background .3s;
-  }
-  
-  /* (3) when live, just swap the background */
-  .profile.online .msn-frame {
-    background: linear-gradient(
-      to bottom,
-      #C8FF7A 0%,
-      #38C400 100%
-    );
-  }
-    
-  /* NOW the real gradient borders: */
-  .profile.offline .msn-frame {
-    border-image-source:
-      linear-gradient(to bottom, #CCCCCC 0%, #777777 100%);
-  }
-  .profile.online .msn-frame {
-    border-image-source:
-      linear-gradient(to bottom, #C8FF7A 0%, #38C400 100%);
-  }
-  
+.avatar-wrapper::before {
+  content:'';
+  position:absolute;
+  top:-6px; left:-6px; right:-6px; bottom:-6px;
+  border-radius:16px;
+  background:linear-gradient(to bottom,#CCCCCC 0%,#777777 100%);
+  z-index:0;
+  transition:background .3s;
+}
+.profile.online .avatar-wrapper::before {
+  background:linear-gradient(to bottom,#C8FF7A 0%,#38C400 100%);
+}
+
+/* 4) on hover, swap gradient → twitch on/off */
+.avatar-wrapper:hover::before {
+  background: no-repeat center/contain;
+}
+.profile.online .avatar-wrapper:hover::before {
+  background-image: url('images/twitchon.png');
+}
+.profile.offline .avatar-wrapper:hover::before {
+  background-image: url('images/twitchoff.png');
+}
+
   
 
 .msn-status { margin-top: 0.5rem; padding: 4px 8px; background: #fff; border: 2px solid #ccc; border-radius: 4px; display: inline-block; }
