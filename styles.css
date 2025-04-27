@@ -361,8 +361,8 @@ async function loadStatus() {
     // ←––– new: swap the avatar image itself
     const avatar = document.querySelector('.avatar');
     avatar.src = online
-      ? '/images/twitchon.jpg'
-      : '/images/twitchoff.jpg';
+      ? '/images/twitchon.png'
+      : '/images/twitchoff.png';
 
   } catch (e) {
     console.warn('Could not load Twitch status', e);
