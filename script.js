@@ -9,6 +9,7 @@ const gameSlugs = [
   "Asura's_Wrath",
   'Metal_Gear_Solid_4',
   'Last_of_Us_Part_II',
+  'Zelda_Skyward_Sword',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
   'Shenmue_I_et_II',
