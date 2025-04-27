@@ -331,8 +331,8 @@ body{font-family:Tahoma, Geneva, sans-serif;
 
 /* ─── 3) “En Stream” green background + white text ─── */
 .profile.online .msn-status {
-  background: #99ec52;
-  border-color: #99ec52;
+  background: #e81123;
+  border-color: #e81123;
 }
 
 .profile.online .msn-status span {
