@@ -308,3 +308,40 @@ body{font-family:Tahoma, Geneva, sans-serif;
   transform: scale(1.05);
   filter: brightness(1.2);
 }
+
+/* ─── 1) Pulse animation avatar ─── */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
+}
+
+.profile.online .avatar-wrapper {
+  animation: pulse 2s infinite ease-in-out;
+  transform-origin: center;
+}
+
+/* ─── 2) Status-box─── */
+.msn-status {
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.msn-status:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+/* disable the inner-text zoom when hovering the status */
+.msn-status .twitch-link:hover {
+  transform: none !important;
+  filter: none   !important;
+}
+
+/* ─── 3) “En Stream” green background + white text ─── */
+.profile.online .msn-status {
+  background: #99ec52;
+  border-color: #99ec52;
+}
+
+.profile.online .msn-status span {
+  color: #fff;
+}
