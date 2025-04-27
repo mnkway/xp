@@ -6,6 +6,7 @@ const gameSlugs = [
   'Ico',
   'Resident_Evil_0',
   'Resident_Evil',
+  "Asura's_Wrath",
   'Metal_Gear_Solid_4',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
