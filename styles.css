@@ -1,176 +1,334 @@
-/* ========== GLOBAL ========== */
+/* ========== global ========== */
 * { box-sizing:border-box; margin:0; padding:0; }
-body{
-  font-family:Tahoma, Geneva, sans-serif;
-  background:linear-gradient(180deg,#a0d8ff 0%,#4fa3ff 100%);
-  min-height:100vh; display:flex; flex-direction:column;
-}
+body{font-family:Tahoma, Geneva, sans-serif;
+     background:linear-gradient(180deg,#a0d8ff 0%,#4fa3ff 100%);
+     min-height:100vh; display:flex; flex-direction:column;}
 .container{width:100%; padding:2rem; margin:auto;}
 @media (min-width:768px){.container{max-width:1320px;}}
 
-/* ========== TASK-BAR ========== */
+/* ========== task-bar – always on top! ========== */
 .taskbar{
-  position:fixed; bottom:0; left:0; width:100%; height:42px; z-index:9999;
+  position:fixed; bottom:0; left:0; width:100%; height:42px;
   background:#0e2e8a; display:flex; align-items:center; gap:8px; padding:0 8px;
   box-shadow:0 -2px 6px rgba(0,0,0,.4);
+  z-index:9999;                /* NEW – outranks every window */
 }
-.taskbar-btn{
-  background:#c3d9ff; border:2px outset #a0c4f0; padding:4px 10px;
-  font-size:.95rem; color:#000080; cursor:pointer; max-width:180px;
-  white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
-}
+.taskbar-btn{background:#c3d9ff; border:2px outset #a0c4f0; padding:4px 10px;
+             font-size:.95rem; color:#000080; cursor:pointer; max-width:180px;
+             white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
 .taskbar-btn:hover{background:#e5ecf9;}
 
-/* ========== WINDOWS ========== */
+* ========== windows ========== */
 .xp-window{
   border:2px solid #000080; border-radius:4px; background:#c3d9ff;
   box-shadow:4px 4px 0 rgba(0,0,0,.5); margin-bottom:2rem; width:100%;
   position:relative; transition:box-shadow .2s, transform .2s;
 }
-.xp-window.maximized{
-  position:fixed; top:12px; left:50%; transform:translateX(-50%);
-  width:94vw; height:86vh; z-index:1000; margin:0;
-}
+.xp-window.maximized{position:fixed; top:12px; left:50%; transform:translateX(-50%);
+                      width:94vw; height:86vh; z-index:1000; margin:0;}
 
-/* ----- title-bar ----- */
-.titlebar{
-  display:flex; justify-content:space-between; align-items:center;
-  background:linear-gradient(to right,#0f4d92,#3a6ea5);
-  padding:4px 8px; color:#fff; font-weight:bold; height:32px; user-select:none;
-}
+/* title-bar (draggable handled per-window) */
+.titlebar{display:flex; justify-content:space-between; align-items:center;
+          background:linear-gradient(to right,#0f4d92,#3a6ea5);
+          padding:4px 8px; color:#fff; font-weight:bold; height:32px; user-select:none; }
 .title-text{font-size:1.2rem;}
 .controls{display:flex; gap:6px;}
-.control-btn{
-  position:relative; width:22px; height:20px; border:1px solid #fff;
-  background:none; cursor:pointer;
-}
+.control-btn{position:relative;width:22px;height:20px;border:1px solid #fff;background:none;cursor:pointer;}
 .control-btn.minimize{background:#3a6ea5;}
-.control-btn.minimize::before{
-  content:''; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width:10px; height:2px; background:#fff;
-}
+.control-btn.minimize::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:10px;height:2px;background:#fff;}
 .control-btn.maximize{background:#3a6ea5;}
-.control-btn.maximize::before{
-  content:''; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width:10px; height:8px; border:2px solid #fff;
-}
+.control-btn.maximize::before{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:10px;height:8px;border:2px solid #fff;}
 .control-btn.close{background:#e81123;}
-.control-btn.close::before{
-  content:'×'; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  color:#fff; font-size:14px; line-height:14px; font-weight:bold;
-}
+.control-btn.close::before{content:'×';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#fff;font-size:14px;line-height:14px;font-weight:bold;}
 .control-btn:hover{filter:brightness(1.2);}
 
-/* ----- window content ----- */
+/* generic window content */
 .window-content{padding:2rem 6rem; overflow:auto; height:calc(100% - 32px);}
 
-/* ========== PROFILE BLOCK ========== */
-.profile{ text-align:center; margin-bottom:1rem; position:relative; }
+/* Moins de padding pour le contenu */
+.window-content {padding: 2rem 6rem; overflow: auto; height: calc(100% - 32px); }
 
-.avatar-wrapper{ position:relative; display:inline-block; margin-bottom:1rem; }
-
-/* avatar image */
-.avatar{
-  display:block; width:140px; height:140px; object-fit:cover;
-  border:4px groove #fff; border-radius:6px; margin:0 auto; position:relative; z-index:1;
-}
-
-/* gradient frame */
-.avatar-wrapper::before{
-  content:''; position:absolute; top:-6px; left:-6px; right:-6px; bottom:-6px;
-  border-radius:16px; z-index:0; transition:background .3s;
+.profile {
+    text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  
+  /* (1) your avatar + white “groove” */
+  .avatar {
+    display: block;            /* so margin auto can center */
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 4px groove #fff;
+    border-radius: 6px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;                /* sit above the gradient frame */
+  }
+  
+.avatar-wrapper::before {
+  content:'';
+  position:absolute;
+  top:-6px; left:-6px; right:-6px; bottom:-6px;
+  border-radius:16px;
   background:linear-gradient(to bottom,#CCCCCC 0%,#777777 100%);
+  z-index:0;
+  transition:background .3s;
 }
-.profile.online .avatar-wrapper::before{
+.profile.online .avatar-wrapper::before {
   background:linear-gradient(to bottom,#C8FF7A 0%,#38C400 100%);
 }
 
-/* pulse when online */
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
-.profile.online .avatar-wrapper{animation:pulse 2s infinite ease-in-out; transform-origin:center;}
-
-/* disable pop on avatar link */
-.avatar-wrapper .twitch-link{transition:none !important;}
-.avatar-wrapper .twitch-link:hover{transform:none !important;filter:none !important;}
-
-/* ----- MSN status badge ----- */
-.msn-status{
-  margin-top:.5rem; padding:4px 8px; background:#fff;
-  border:2px solid #ccc; border-radius:4px; display:inline-block;
-  transition:transform .2s, filter .2s;
+/* 4) on hover, swap gradient → twitch on/off */
+.avatar-wrapper:hover::before {
+  background: no-repeat center/contain;
 }
-.msn-status:hover{transform:scale(1.05); filter:brightness(1.2);}
-.msn-status span{font-size:1rem; color:#555;}
 
-.profile.online .msn-status{background:#99ec52; border-color:#99ec52;}
-.profile.online .msn-status span{color:#fff;}
+.msn-status { margin-top: 0.5rem; padding: 4px 8px; background: #fff; border: 2px solid #ccc; border-radius: 4px; display: inline-block; }
+.msn-status span { font-size: 1rem; color: #555; }
 
-.msn-status .twitch-link:hover{transform:none !important; filter:none !important;}
+.links { display: flex; flex-direction: column; gap: 1.1rem; }
+.separator { height: 2px; background: #888; width: 100%; margin: 2rem 0; }
+.link-card { background: #e5ecf9; color: #000080; padding: 1.1rem 1.4rem; border: 2px outset #a0c4f0; border-radius: 6px; box-shadow: 2px 2px 0 #888; display: flex; align-items: center; position: relative; cursor: pointer; transition: transform .1s; }
+.link-card:hover { transform: translateY(-2px); border-color: #8abce6; }
+.link-card .text { flex: 1; text-align: center; font-size: 1.15rem; text-shadow: 1px 1px #fff; }
+.link-card .menu { position: absolute; right: .8rem; font-size: 1.2rem; color: #000; }
 
-/* ========== LINK CARDS ========== */
-.links{display:flex; flex-direction:column; gap:1.1rem;}
-.separator{height:2px; background:#888; width:100%; margin:2rem 0;}
-.link-card{
-  background:#e5ecf9; color:#000080; padding:1.1rem 1.4rem;
-  border:2px outset #a0c4f0; border-radius:6px; box-shadow:2px 2px 0 #888;
-  display:flex; align-items:center; position:relative; cursor:pointer;
-  transition:transform .1s;
+.taskbar { position: fixed; bottom: 0; left: 0; width: 100%; height: 42px; background: #0e2e8a; display: flex; align-items: center; padding: 0 8px; gap: 8px; box-shadow: 0 -2px 6px rgba(0,0,0,.4); }
+.taskbar-btn { background: #c3d9ff; border: 2px outset #a0c4f0; padding: 4px 10px; font-size: .95rem; color: #000080; cursor: pointer; max-width: 180px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.taskbar-btn:hover { background: #e5ecf9; }
+
+#sentinel { height: 1px; }
+.broken-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity .3s ease; z-index: 2000; }
+.broken-overlay.visible { opacity: 1; visibility: visible; }
+.broken-message { background: #c3d9ff; border: 2px solid #000080; padding: 2rem; border-radius: 6px; color: #000080; font-size: 1.2rem; text-align: center; max-width: 90%; }
+
+/* 16∶9 for thumbnail */
+.vod-video {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 9/16 = 0.5625 → 56.25% */
+    overflow: hidden;
+  }
+  .vod-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+/* extra padding top/bottom inside the “Mes Liens” window */
+#win-links .window-content {
+    padding: 3rem 6rem;
+}  
+
+
+.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  .config-table th,
+  .config-table td {
+    border: 1px solid #888;
+    padding: 6px 8px;
+  }
+  .config-table th {
+    background: #e5ecf9;
+    text-align: left;
+  }
+  .config-table tr:nth-child(even) td {
+    background: #f7faff;
+  }
+  
+  /* Mon PC window floats above everything, smaller width */
+#win-pc {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    width: 400px;       /* narrower than full-width */
+    z-index: 2000;      /* ensure it starts on top */
+  }
+
+  
+  /* Fenêtres XP */
+  .xp-window {
+    border: 2px solid #000080;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+    background: #c3d9ff;
+    margin-bottom: 2rem;
+    position: relative;
+    width: 100%;
+  
+    /* Animate only visual flair – not geometry – for snappier drag/resize */
+    transition: box-shadow .2s ease, transform .2s ease;
+  }
+  
+  .xp-window.maximized { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); width: 94vw; height: 86vh; z-index: 1000; margin: 0; }
+  .controls { display: flex; gap: 6px; }
+  /* … everything below is unchanged … */
+  
+
+/* Mon PC popup is always 400px wide */
+#win-pc {
+    width: 400px;
+  }
+  
+  .search-container {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  #game-search {
+    width: 70%;
+    padding: 4px 8px;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 1rem;
+    background: #e5ecf9;
+    border: 2px outset #a0c4f0;
+    border-radius: 4px;
+    box-shadow: 2px 2px 0 #888;
+    color: #000080;
+  }
+  #game-search:focus {
+    outline: none;
+    box-shadow: 1px 1px 0 #888 inset;
+  }
+
+/* ========== Instagram window specifics ========== */
+#win-insta{width:400px;}               /* desktop size matches Mon PC */
+#win-insta .links.instagram{
+  display:flex; flex-direction:row; gap:1rem;
 }
-.link-card:hover{transform:translateY(-2px); border-color:#8abce6;}
-.link-card .text{flex:1; text-align:center; font-size:1.15rem; text-shadow:1px 1px #fff;}
-.link-card .menu{position:absolute; right:.8rem; font-size:1.2rem; color:#000;}
-
-/* ========== TASKBAR duplicate rules (buttons) ========== */
-.taskbar {position:fixed;bottom:0;left:0;width:100%;height:42px;background:#0e2e8a;display:flex;align-items:center;padding:0 8px;gap:8px;box-shadow:0 -2px 6px rgba(0,0,0,.4);}
-.taskbar-btn {background:#c3d9ff;border:2px outset #a0c4f0;padding:4px 10px;font-size:.95rem;color:#000080;cursor:pointer;max-width:180px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
-.taskbar-btn:hover {background:#e5ecf9;}
-
-/* 16×9 iframe helper */
-.vod-video{position:relative;width:100%;padding-top:56.25%;overflow:hidden;}
-.vod-video iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-
-/* extra padding inside “Mes Liens” */
-#win-links .window-content{padding:3rem 6rem;}
-
-/* ========== MON PC POPUP (unchanged) ========== */
-#win-pc{position:absolute;top:100px;left:100px;width:400px;z-index:2000;}
-#win-pc .window-content{padding:1rem;}
-
-/* ========== INSTAGRAM POPUP ========== */
-#win-insta{width:400px;}
-#win-insta .links.instagram{display:flex;flex-direction:row;gap:1rem;}
-#win-insta .links.instagram .link-card{flex:1;}
-#win-insta .titlebar{cursor:move;}
-
-/* ========== SEARCH BAR IN JEUX ========== */
-.search-container{margin-bottom:1rem;text-align:center;}
-#game-search{
-  width:70%;padding:4px 8px;font-family:Tahoma,Geneva,sans-serif;font-size:1rem;
-  background:#e5ecf9;border:2px outset #a0c4f0;border-radius:4px;box-shadow:2px 2px 0 #888;
-  color:#000080;
+#win-insta .links.instagram .link-card{
+  flex:1;                             /* ➜ each card widens */
 }
-#game-search:focus{outline:none;box-shadow:1px 1px 0 #888 inset;}
 
-/* ========== MOBILE TWEAKS ========== */
+/* Make Insta window titlebar draggable */
+#win-insta .titlebar {
+  cursor: move;
+}
+
+/* ========== MOBILE tweaks ========== */
 @media (max-width:575.98px){
+  /* windows stretch edge-to-edge & tighter padding */
   .xp-window{width:100%;}
   .window-content{padding:1.5rem 1rem;}
   #win-links .window-content{padding:2rem 1rem;}
 
+  /* fonts & gaps scale down a notch */
   .title-text{font-size:1rem;}
   .links{gap:.8rem;}
   .link-card{padding:1rem 1.2rem;}
 
+  /* Instagram cards now stack */
   #win-insta{width:100%;}
   #win-insta .links.instagram{flex-direction:column;}
 }
 
-/* make draggable title-bars show move cursor */
-#win-insta .titlebar, #win-pc .titlebar{cursor:move;}
+/* ========== Mon PC popup still floats smaller ========== */
+#win-pc{position:absolute; top:100px; left:100px; width:400px; z-index:2000;}
+#win-pc .window-content{padding:1rem;}
 
-/* disable default twitch-link hover pop everywhere else */
-.twitch-link{
-  display:inline-block;text-decoration:none;color:inherit;
-  transition:transform .2s ease, filter .2s ease; cursor:pointer;
+/* Mobile: stack “Ce que j’ai utilisé” items vertically,
+   let the <strong> labels size themselves, and make iframes fluid */
+   @media (max-width:575.98px) {
+    .guide-section .used-list {
+      /* switch from flex to a single-column grid with a bit more gap */
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .guide-section .used-list li {
+      /* stack label above content, tighten up the gap */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .guide-section .used-list li strong {
+      /* let the label size itself, and add a little bottom margin */
+      width: auto;
+      margin-bottom: 0;
+    }
+    .guide-section .used-list li.used-video iframe {
+      /* make tutorial videos full-width */
+      width: 100%;
+      height: auto;
+    }
+  }
+
+/* Make draggable title-bars show a “move” cursor */
+#win-insta .titlebar,
+#win-pc   .titlebar {
+  cursor: move;
 }
-.twitch-link:hover{transform:scale(1.05); filter:brightness(1.2);}
+
+/* ==== Twitch-link hover “pop” effect ====*/
+.twitch-link {
+  display: inline-block;       
+  text-decoration: none;      
+  color: inherit;             
+  transition: transform 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.twitch-link:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+/* ─── 1) Pulse animation avatar ─── */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
+}
+
+.profile.online .avatar-wrapper {
+  animation: pulse 2s infinite ease-in-out;
+  transform-origin: center;
+}
+
+/* ─── 2) Status-box─── */
+.msn-status {
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.msn-status:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+/* disable the inner-text zoom when hovering the status */
+.msn-status .twitch-link:hover {
+  transform: none !important;
+  filter: none   !important;
+}
+
+/* ─── 3) “En Stream” green background + white text ─── */
+.profile.online .msn-status {
+  background: #99ec52;
+  border-color: #99ec52;
+}
+
+.profile.online .msn-status span {
+  color: #fff;
+}
+
+/* ─── disable twitch-link hover on the avatar ─── */
+.avatar-wrapper .twitch-link {
+  transition: none !important;
+}
+.avatar-wrapper .twitch-link:hover {
+  transform: none !important;
+  filter: none !important;
+}
