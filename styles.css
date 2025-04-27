@@ -350,16 +350,12 @@ body{font-family:Tahoma, Geneva, sans-serif;
   filter: none !important;
 }
 
-/* Keep the image itself non-interactive for hoverzoom */
-.avatar-wrapper .twitch-link img {
-  pointer-events: none;
-}
-
-/* Add this rule to prevent hoverzoom on specific images */
+/* force the image to take clicks again */
+.avatar-wrapper .twitch-link img,
 img[src*="mnkwayplop"],
 img[src*="twitchon"],
 img[src*="twitchoff"] {
-  pointer-events: none;
+  pointer-events: auto !important;
 }
 
 /* Make sure the link itself still remains clickable */
