@@ -2,7 +2,6 @@ let zTop = 1000;
 
 /* ─────────────── Jeux list ─────────────── */
 const gameSlugs = [
-//'Okami',  
   'Ico',
   'Resident_Evil_0',
   'Resident_Evil',
@@ -13,10 +12,7 @@ const gameSlugs = [
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
   'Shenmue_I_et_II',
-/*  'Zelda_Skyward_Sword',
-  'Resident_Evil_2',*/
 ];
-
 
 /* ──────────────────────────────────────────
    Helpers for broken-overlay & separator
@@ -43,7 +39,6 @@ function setupWindow(win) {
   const btnClose = win.querySelector('.close');
   const titlebar = win.querySelector('.titlebar');
 
-  // bring-to-front
   function bringToFront() { win.style.zIndex = ++zTop; }
   win.addEventListener('mousedown', bringToFront);
   win.bringToFront = bringToFront;
@@ -76,7 +71,6 @@ function setupWindow(win) {
       document.removeEventListener('mouseup',   stopDrag);
     }
   }
-
 
   /* Resize handle */
   let isResizing = false, startW = 0, startH = 0, startX = 0, startY = 0;
@@ -130,7 +124,6 @@ function setupWindow(win) {
     updateSeparator();
   });
 
-  // **Updated**: hide—not remove—PC or Insta windows so they can re-open infinitely
   btnClose.addEventListener('click', e => {
     e.stopPropagation();
     if (win.id === 'win-pc' || win.id === 'win-insta') {
@@ -142,37 +135,45 @@ function setupWindow(win) {
   });
 }
 
-/* ───────── Twitch status (updaté) ───────── */
+/* ───────── Twitch status & avatar swap ───────── */
 const profileEl  = document.querySelector('.profile');
 const statusText = document.getElementById('stream-text');
 
 async function loadStatus() {
   try {
-    const res   = await fetch('./twitch-status.json?ts=' + Date.now());
+    const res        = await fetch('./twitch-status.json?ts=' + Date.now());
     const { online } = await res.json();
 
-    // toggle the XP-style classes
+    // toggle XP-style classes
     profileEl.classList.toggle('online',  online);
     profileEl.classList.toggle('offline', !online);
 
     // swap the “En Stream” / “Pas en Stream” text
     statusText.textContent = online ? 'En Stream' : 'Pas en Stream';
-
-    // ←––– new: swap the avatar image itself
-    const avatar = document.querySelector('.avatar');
-    avatar.src = online
-      ? '/images/twitchon.png'
-      : '/images/twitchoff.png';
-
   } catch (e) {
     console.warn('Could not load Twitch status', e);
   }
 }
 
-
+// call immediately & every minute
 loadStatus();
 setInterval(loadStatus, 60_000);
 
+/* ───────── Avatar hover swapping ───────── */
+const avatarWrapper = document.querySelector('.avatar-wrapper');
+const avatarImg     = avatarWrapper.querySelector('.avatar');
+const defaultAvatar = avatarImg.src;
+
+avatarWrapper.addEventListener('mouseenter', () => {
+  const isOnline = profileEl.classList.contains('online');
+  avatarImg.src  = isOnline
+    ? '/images/twitchon.png'
+    : '/images/twitchoff.png';
+});
+
+avatarWrapper.addEventListener('mouseleave', () => {
+  avatarImg.src = defaultAvatar;
+});
 
 /* ───────── Primary link cards ───────── */
 const primaryCards = document.querySelectorAll('.links.primary .link-card');
@@ -183,8 +184,6 @@ primaryCards.forEach(c => {
 
 function goToLink() {
   const dest = this.dataset.link;
-
-  // Mon PC
   if (dest === 'mon-pc') {
     const pcWin = document.getElementById('win-pc');
     if (!pcWin) return;
@@ -199,8 +198,6 @@ function goToLink() {
     });
     return;
   }
-
-  // Instagram
   if (dest === 'insta') {
     const instaWin = document.getElementById('win-insta');
     if (!instaWin) return;
@@ -215,28 +212,21 @@ function goToLink() {
     });
     return;
   }
-
-  // Other externals
   const urlMap = {
     twitter:      'https://x.com/MNKway_',
     'chaine-vod': 'https://www.youtube.com/@mnkway/featured',
     letterboxd:   'https://letterboxd.com/mnkway/',
     mangacollec:  'https://www.mangacollec.com/user/mnkway/collection',
     tiktok:       'https://www.tiktok.com/@devilmnkway?is_from_webapp=1&sender_device=pc',
-    
   };
   if (urlMap[dest]) {
     window.open(urlMap[dest], '_blank');
     return;
   }
-
-  // Jeux entries
   if (dest.startsWith('jeux/')) {
     window.location.href = `${dest}/game.html`;
     return;
   }
-
-  // Fallback
   window.location.href = `dest}`;
 }
 
