@@ -346,19 +346,25 @@ body{font-family:Tahoma, Geneva, sans-serif;
   color: #fff;
 }
 
-/* ─── swap gradient fill for on/off images ─── */
-.profile.offline .msn-frame {
-  /* “off” image behind the avatar */
-  background-image: url('/images/twitchoff.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+async function loadStatus() {
+  try {
+    const res   = await fetch('./twitch-status.json?ts=' + Date.now());
+    const { online } = await res.json();
 
-.profile.online .msn-frame {
-  /* “on” image behind the avatar */
-  background-image: url('/images/twitchon.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    // toggle the XP-style classes
+    profileEl.classList.toggle('online',  online);
+    profileEl.classList.toggle('offline', !online);
+
+    // swap the “En Stream” / “Pas en Stream” text
+    statusText.textContent = online ? 'En Stream' : 'Pas en Stream';
+
+    // ←––– new: swap the avatar image itself
+    const avatar = document.querySelector('.avatar');
+    avatar.src = online
+      ? '/images/twitchon.jpg'
+      : '/images/twitchoff.jpg';
+
+  } catch (e) {
+    console.warn('Could not load Twitch status', e);
+  }
 }
