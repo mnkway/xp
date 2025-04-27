@@ -150,13 +150,25 @@ async function loadStatus() {
   try {
     const res   = await fetch('./twitch-status.json?ts=' + Date.now());
     const { online } = await res.json();
+
+    // toggle the XP-style classes
     profileEl.classList.toggle('online',  online);
     profileEl.classList.toggle('offline', !online);
+
+    // swap the “En Stream” / “Pas en Stream” text
     statusText.textContent = online ? 'En Stream' : 'Pas en Stream';
+
+    // ←––– new: swap the avatar image itself
+    const avatar = document.querySelector('.avatar');
+    avatar.src = online
+      ? '/images/twitchon.png'
+      : '/images/twitchoff.png';
+
   } catch (e) {
     console.warn('Could not load Twitch status', e);
   }
 }
+
 
 loadStatus();
 setInterval(loadStatus, 60_000);
