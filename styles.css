@@ -345,3 +345,20 @@ body{font-family:Tahoma, Geneva, sans-serif;
 .profile.online .msn-status span {
   color: #fff;
 }
+
+/* ─── swap gradient fill for on/off images ─── */
+.profile.offline .msn-frame {
+  /* “off” image behind the avatar */
+  background-image: url('/images/twitchoff.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.profile.online .msn-frame {
+  /* “on” image behind the avatar */
+  background-image: url('/images/twitchon.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
