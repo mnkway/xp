@@ -1,258 +1,176 @@
-/* ========== global ========== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: Tahoma, Geneva, sans-serif;
-  background: linear-gradient(180deg, #a0d8ff 0%, #4fa3ff 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+/* ========== GLOBAL ========== */
+* { box-sizing:border-box; margin:0; padding:0; }
+body{
+  font-family:Tahoma, Geneva, sans-serif;
+  background:linear-gradient(180deg,#a0d8ff 0%,#4fa3ff 100%);
+  min-height:100vh; display:flex; flex-direction:column;
 }
-.container {
-  width: 100%;
-  padding: 2rem;
-  margin: auto;
+.container{width:100%; padding:2rem; margin:auto;}
+@media (min-width:768px){.container{max-width:1320px;}}
+
+/* ========== TASK-BAR ========== */
+.taskbar{
+  position:fixed; bottom:0; left:0; width:100%; height:42px; z-index:9999;
+  background:#0e2e8a; display:flex; align-items:center; gap:8px; padding:0 8px;
+  box-shadow:0 -2px 6px rgba(0,0,0,.4);
 }
-@media (min-width: 768px) {
-  .container { max-width: 1320px; }
+.taskbar-btn{
+  background:#c3d9ff; border:2px outset #a0c4f0; padding:4px 10px;
+  font-size:.95rem; color:#000080; cursor:pointer; max-width:180px;
+  white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
+}
+.taskbar-btn:hover{background:#e5ecf9;}
+
+/* ========== WINDOWS ========== */
+.xp-window{
+  border:2px solid #000080; border-radius:4px; background:#c3d9ff;
+  box-shadow:4px 4px 0 rgba(0,0,0,.5); margin-bottom:2rem; width:100%;
+  position:relative; transition:box-shadow .2s, transform .2s;
+}
+.xp-window.maximized{
+  position:fixed; top:12px; left:50%; transform:translateX(-50%);
+  width:94vw; height:86vh; z-index:1000; margin:0;
 }
 
-/* ========== task-bar – always on top! ========== */
-.taskbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 42px;
-  background: #0e2e8a;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 8px;
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.4);
-  z-index: 9999;
+/* ----- title-bar ----- */
+.titlebar{
+  display:flex; justify-content:space-between; align-items:center;
+  background:linear-gradient(to right,#0f4d92,#3a6ea5);
+  padding:4px 8px; color:#fff; font-weight:bold; height:32px; user-select:none;
 }
-.taskbar-btn {
-  background: #c3d9ff;
-  border: 2px outset #a0c4f0;
-  padding: 4px 10px;
-  font-size: .95rem;
-  color: #000080;
-  cursor: pointer;
-  max-width: 180px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.title-text{font-size:1.2rem;}
+.controls{display:flex; gap:6px;}
+.control-btn{
+  position:relative; width:22px; height:20px; border:1px solid #fff;
+  background:none; cursor:pointer;
 }
-.taskbar-btn:hover { background: #e5ecf9; }
+.control-btn.minimize{background:#3a6ea5;}
+.control-btn.minimize::before{
+  content:''; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:10px; height:2px; background:#fff;
+}
+.control-btn.maximize{background:#3a6ea5;}
+.control-btn.maximize::before{
+  content:''; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:10px; height:8px; border:2px solid #fff;
+}
+.control-btn.close{background:#e81123;}
+.control-btn.close::before{
+  content:'×'; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  color:#fff; font-size:14px; line-height:14px; font-weight:bold;
+}
+.control-btn:hover{filter:brightness(1.2);}
 
-/* ========== XP windows ========== */
-.xp-window {
-  position: relative;
-  width: 100%;
-  margin-bottom: 2rem;
-  background: #c3d9ff;
-  border: 2px solid #000080;
-  border-radius: 4px;
-  box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
-  transition: box-shadow .2s ease, transform .2s ease;
-}
-.xp-window.maximized {
-  position: fixed;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 94vw;
-  height: 86vh;
-  z-index: 1000;
-  margin: 0;
+/* ----- window content ----- */
+.window-content{padding:2rem 6rem; overflow:auto; height:calc(100% - 32px);}
+
+/* ========== PROFILE BLOCK ========== */
+.profile{ text-align:center; margin-bottom:1rem; position:relative; }
+
+.avatar-wrapper{ position:relative; display:inline-block; margin-bottom:1rem; }
+
+/* avatar image */
+.avatar{
+  display:block; width:140px; height:140px; object-fit:cover;
+  border:4px groove #fff; border-radius:6px; margin:0 auto; position:relative; z-index:1;
 }
 
-.titlebar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(to right, #0f4d92, #3a6ea5);
-  padding: 4px 8px;
-  color: #fff;
-  font-weight: bold;
-  height: 32px;
-  user-select: none;
+/* gradient frame */
+.avatar-wrapper::before{
+  content:''; position:absolute; top:-6px; left:-6px; right:-6px; bottom:-6px;
+  border-radius:16px; z-index:0; transition:background .3s;
+  background:linear-gradient(to bottom,#CCCCCC 0%,#777777 100%);
 }
-.title-text { font-size: 1.2rem; }
-.controls { display: flex; gap: 6px; }
-.control-btn {
-  position: relative;
-  width: 22px;
-  height: 20px;
-  border: 1px solid #fff;
-  background: none;
-  cursor: pointer;
-}
-.control-btn.minimize { background: #3a6ea5; }
-.control-btn.minimize::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 2px;
-  background: #fff;
-}
-.control-btn.maximize { background: #3a6ea5; }
-.control-btn.maximize::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 8px;
-  border: 2px solid #fff;
-}
-.control-btn.close { background: #e81123; }
-.control-btn.close::before {
-  content: '×';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  font-size: 14px;
-  line-height: 14px;
-  font-weight: bold;
-}
-.control-btn:hover { filter: brightness(1.2); }
-
-.window-content {
-  padding: 2rem 6rem;
-  overflow: auto;
-  height: calc(100% - 32px);
+.profile.online .avatar-wrapper::before{
+  background:linear-gradient(to bottom,#C8FF7A 0%,#38C400 100%);
 }
 
-/* ========== profile avatar & MSN frame ========== */
-.profile {
-  text-align: center;
-  margin-bottom: 1rem;
-  position: relative;
+/* pulse when online */
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.profile.online .avatar-wrapper{animation:pulse 2s infinite ease-in-out; transform-origin:center;}
+
+/* disable pop on avatar link */
+.avatar-wrapper .twitch-link{transition:none !important;}
+.avatar-wrapper .twitch-link:hover{transform:none !important;filter:none !important;}
+
+/* ----- MSN status badge ----- */
+.msn-status{
+  margin-top:.5rem; padding:4px 8px; background:#fff;
+  border:2px solid #ccc; border-radius:4px; display:inline-block;
+  transition:transform .2s, filter .2s;
 }
-.avatar-wrapper {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 1rem;
+.msn-status:hover{transform:scale(1.05); filter:brightness(1.2);}
+.msn-status span{font-size:1rem; color:#555;}
+
+.profile.online .msn-status{background:#99ec52; border-color:#99ec52;}
+.profile.online .msn-status span{color:#fff;}
+
+.msn-status .twitch-link:hover{transform:none !important; filter:none !important;}
+
+/* ========== LINK CARDS ========== */
+.links{display:flex; flex-direction:column; gap:1.1rem;}
+.separator{height:2px; background:#888; width:100%; margin:2rem 0;}
+.link-card{
+  background:#e5ecf9; color:#000080; padding:1.1rem 1.4rem;
+  border:2px outset #a0c4f0; border-radius:6px; box-shadow:2px 2px 0 #888;
+  display:flex; align-items:center; position:relative; cursor:pointer;
+  transition:transform .1s;
 }
-.avatar {
-  display: block;
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border: 4px groove #fff;
-  border-radius: 6px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
+.link-card:hover{transform:translateY(-2px); border-color:#8abce6;}
+.link-card .text{flex:1; text-align:center; font-size:1.15rem; text-shadow:1px 1px #fff;}
+.link-card .menu{position:absolute; right:.8rem; font-size:1.2rem; color:#000;}
+
+/* ========== TASKBAR duplicate rules (buttons) ========== */
+.taskbar {position:fixed;bottom:0;left:0;width:100%;height:42px;background:#0e2e8a;display:flex;align-items:center;padding:0 8px;gap:8px;box-shadow:0 -2px 6px rgba(0,0,0,.4);}
+.taskbar-btn {background:#c3d9ff;border:2px outset #a0c4f0;padding:4px 10px;font-size:.95rem;color:#000080;cursor:pointer;max-width:180px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+.taskbar-btn:hover {background:#e5ecf9;}
+
+/* 16×9 iframe helper */
+.vod-video{position:relative;width:100%;padding-top:56.25%;overflow:hidden;}
+.vod-video iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+
+/* extra padding inside “Mes Liens” */
+#win-links .window-content{padding:3rem 6rem;}
+
+/* ========== MON PC POPUP (unchanged) ========== */
+#win-pc{position:absolute;top:100px;left:100px;width:400px;z-index:2000;}
+#win-pc .window-content{padding:1rem;}
+
+/* ========== INSTAGRAM POPUP ========== */
+#win-insta{width:400px;}
+#win-insta .links.instagram{display:flex;flex-direction:row;gap:1rem;}
+#win-insta .links.instagram .link-card{flex:1;}
+#win-insta .titlebar{cursor:move;}
+
+/* ========== SEARCH BAR IN JEUX ========== */
+.search-container{margin-bottom:1rem;text-align:center;}
+#game-search{
+  width:70%;padding:4px 8px;font-family:Tahoma,Geneva,sans-serif;font-size:1rem;
+  background:#e5ecf9;border:2px outset #a0c4f0;border-radius:4px;box-shadow:2px 2px 0 #888;
+  color:#000080;
 }
-.avatar-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  right: -6px;
-  bottom: -6px;
-  border-radius: 16px;
-  background: linear-gradient(to bottom, #CCCCCC 0%, #777777 100%);
-  z-index: 0;
-  transition: background .3s;
-}
-.profile.online .avatar-wrapper::before {
-  background: linear-gradient(to bottom, #C8FF7A 0%, #38C400 100%);
-}
-/* hover swap to Twitch icons */
-.avatar-wrapper:hover::before {
-  background: no-repeat center/contain;
-}
-.profile.online .avatar-wrapper:hover::before {
-  background-image: url('images/twitchon.png');
-}
-.profile.offline .avatar-wrapper:hover::before {
-  background-image: url('images/twitchoff.png');
+#game-search:focus{outline:none;box-shadow:1px 1px 0 #888 inset;}
+
+/* ========== MOBILE TWEAKS ========== */
+@media (max-width:575.98px){
+  .xp-window{width:100%;}
+  .window-content{padding:1.5rem 1rem;}
+  #win-links .window-content{padding:2rem 1rem;}
+
+  .title-text{font-size:1rem;}
+  .links{gap:.8rem;}
+  .link-card{padding:1rem 1.2rem;}
+
+  #win-insta{width:100%;}
+  #win-insta .links.instagram{flex-direction:column;}
 }
 
-/* ========== status box ========== */
-.msn-status {
-  margin-top: 0.5rem;
-  padding: 4px 8px;
-  background: #fff;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  display: inline-block;
-  transition: transform .2s ease, filter .2s ease;
-}
-.msn-status span { font-size: 1rem; color: #555; }
-.msn-status:hover {
-  transform: scale(1.05);
-  filter: brightness(1.2);
-}
-.profile.online .msn-status {
-  background: #99ec52;
-  border-color: #99ec52;
-}
-.profile.online .msn-status span { color: #fff; }
+/* make draggable title-bars show move cursor */
+#win-insta .titlebar, #win-pc .titlebar{cursor:move;}
 
-/* ========== links list ========== */
-.links { display: flex; flex-direction: column; gap: 1.1rem; }
-.separator { height: 2px; background: #888; margin: 2rem 0; }
-.link-card {
-  display: flex;
-  align-items: center;
-  background: #e5ecf9;
-  color: #000080;
-  padding: 1.1rem 1.4rem;
-  border: 2px outset #a0c4f0;
-  border-radius: 6px;
-  box-shadow: 2px 2px 0 #888;
-  position: relative;
-  cursor: pointer;
-  transition: transform .1s;
+/* disable default twitch-link hover pop everywhere else */
+.twitch-link{
+  display:inline-block;text-decoration:none;color:inherit;
+  transition:transform .2s ease, filter .2s ease; cursor:pointer;
 }
-.link-card:hover { transform: translateY(-2px); border-color: #8abce6; }
-.link-card .text {
-  flex: 1;
-  text-align: center;
-  font-size: 1.15rem;
-  text-shadow: 1px 1px #fff;
-}
-.link-card .menu {
-  position: absolute;
-  right: .8rem;
-  font-size: 1.2rem;
-  color: #000;
-}
-
-/* ========== responsive tweaks etc. ========== */
-@media (max-width: 575.98px) {
-  .xp-window { width: 100%; }
-  .window-content { padding: 1.5rem 1rem; }
-  #win-links .window-content { padding: 2rem 1rem; }
-  .title-text { font-size: 1rem; }
-  .links { gap: .8rem; }
-  .link-card { padding: 1rem 1.2rem; }
-}
-
-/* ========== additional windows & features ========== */
-#win-pc { position: absolute; top: 100px; left: 100px; width: 400px; z-index: 2000; }
-#win-pc .window-content { padding: 1rem; }
-#win-insta { width: 400px; }
-#win-insta .links.instagram { display: flex; flex-direction: row; gap: 1rem; }
-#win-insta .links.instagram .link-card { flex: 1; }
-#win-insta .titlebar, #win-pc .titlebar { cursor: move; }
-
-/* VOD thumbnails */
-.vod-video { position: relative; width: 100%; padding-top: 56.25%; overflow: hidden; }
-.vod-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-/* table & form styles below… */
-.config-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
-.config-table th, .config-table td { border: 1px solid #888; padding: 6px 8px; }
-.config-table th { background: #e5ecf9; text-align: left; }
-.config-table tr:nth-child(even) td { background: #f7faff; }
+.twitch-link:hover{transform:scale(1.05); filter:brightness(1.2);}
