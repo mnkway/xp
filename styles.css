@@ -90,14 +90,6 @@ body{font-family:Tahoma, Geneva, sans-serif;
 .avatar-wrapper:hover::before {
   background: no-repeat center/contain;
 }
-.profile.online .avatar-wrapper:hover::before {
-  background-image: url('images/twitchon.png');
-}
-.profile.offline .avatar-wrapper:hover::before {
-  background-image: url('images/twitchoff.png');
-}
-
-  
 
 .msn-status { margin-top: 0.5rem; padding: 4px 8px; background: #fff; border: 2px solid #ccc; border-radius: 4px; display: inline-block; }
 .msn-status span { font-size: 1rem; color: #555; }
@@ -331,3 +323,13 @@ body{font-family:Tahoma, Geneva, sans-serif;
 .profile.online .msn-status span {
   color: #fff;
 }
+
+/* ─── disable twitch-link hover on the avatar ─── */
+.avatar-wrapper .twitch-link {
+  transition: none !important;
+}
+.avatar-wrapper .twitch-link:hover {
+  transform: none !important;
+  filter: none !important;
+}
+
