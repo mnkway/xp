@@ -18,7 +18,7 @@ body{font-family:Tahoma, Geneva, sans-serif;
              white-space:nowrap; text-overflow:ellipsis; overflow:hidden;}
 .taskbar-btn:hover{background:#e5ecf9;}
 
-* ========== windows ========== */
+/* ========== windows ========== */
 .xp-window{
   border:2px solid #000080; border-radius:4px; background:#c3d9ff;
   box-shadow:4px 4px 0 rgba(0,0,0,.5); margin-bottom:2rem; width:100%;
@@ -52,16 +52,21 @@ body{font-family:Tahoma, Geneva, sans-serif;
     text-align: center;
     margin-bottom: 1rem;
     position: relative;
-  }
-  
-  .avatar-wrapper {
+}
+
+.avatar-wrapper {
     position: relative;
     display: inline-block;
     margin-bottom: 1rem;
-  }
-  
-  /* (1) your avatar + white “groove” */
-  .avatar {
+    transition: transform 0.2s ease;
+}
+
+.avatar-wrapper:hover {
+    transform: scale(1.05);
+}
+
+/* (1) your avatar + white “groove” */
+.avatar {
     display: block;            /* so margin auto can center */
     width: 140px;
     height: 140px;
@@ -71,28 +76,46 @@ body{font-family:Tahoma, Geneva, sans-serif;
     margin: 0 auto;
     position: relative;
     z-index: 1;                /* sit above the gradient frame */
-  }
-  
-.avatar-wrapper::before {
-  content:'';
-  position:absolute;
-  top:-6px; left:-6px; right:-6px; bottom:-6px;
-  border-radius:16px;
-  background:linear-gradient(to bottom,#CCCCCC 0%,#777777 100%);
-  z-index:0;
-  transition:background .3s;
-}
-.profile.online .avatar-wrapper::before {
-  background:linear-gradient(to bottom,#C8FF7A 0%,#38C400 100%);
 }
 
-/* 4) on hover, swap gradient → twitch on/off */
+/* Update the avatar-wrapper hover and before styles */
+.avatar-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border-radius: 16px;
+    background: linear-gradient(to bottom, #CCCCCC 0%, #777777 100%);
+    z-index: 0;
+    transition: box-shadow 0.2s ease;
+}
+
+/* Update hover glow effect for offline state */
 .avatar-wrapper:hover::before {
-  background: no-repeat center/contain;
+    box-shadow: 0 0 15px rgba(0, 0, 128, 0.7);  /* Changed to Windows XP blue (#000080) */
+}
+
+/* Add hover glow effect for online state */
+.profile.online .avatar-wrapper:hover::before {
+    box-shadow: 0 0 15px rgba(56, 196, 0, 0.7);
+}
+
+/* Update online state with green gradient */
+.profile.online .avatar-wrapper::before {
+    background: linear-gradient(to bottom, #C8FF7A 0%, #38C400 100%);
 }
 
 .msn-status { margin-top: 0.5rem; padding: 4px 8px; background: #fff; border: 2px solid #ccc; border-radius: 4px; display: inline-block; }
 .msn-status span { font-size: 1rem; color: #555; }
+.msn-status {
+  transition: filter 0.2s ease;
+}
+
+.msn-status:hover {
+  filter: brightness(1.2);
+}
 
 .links { display: flex; flex-direction: column; gap: 1.1rem; }
 .separator { height: 2px; background: #888; width: 100%; margin: 2rem 0; }
@@ -278,13 +301,12 @@ body{font-family:Tahoma, Geneva, sans-serif;
   display: inline-block;       
   text-decoration: none;      
   color: inherit;             
-  transition: transform 0.2s ease, filter 0.2s ease;
   cursor: pointer;
 }
 
 .twitch-link:hover {
-  transform: scale(1.05);
-  filter: brightness(1.2);
+  filter: none;
+  transform: none;
 }
 
 /* ─── 1) Pulse animation avatar ─── */
@@ -300,18 +322,11 @@ body{font-family:Tahoma, Geneva, sans-serif;
 
 /* ─── 2) Status-box─── */
 .msn-status {
-  transition: transform 0.2s ease, filter 0.2s ease;
+  transition: filter 0.2s ease;
 }
 
 .msn-status:hover {
-  transform: scale(1.05);
   filter: brightness(1.2);
-}
-
-/* disable the inner-text zoom when hovering the status */
-.msn-status .twitch-link:hover {
-  transform: none !important;
-  filter: none   !important;
 }
 
 /* ─── 3) “En Stream” green background + white text ─── */
@@ -327,8 +342,36 @@ body{font-family:Tahoma, Geneva, sans-serif;
 /* ─── disable twitch-link hover on the avatar ─── */
 .avatar-wrapper .twitch-link {
   transition: none !important;
+  pointer-events: auto;
+  cursor: pointer;  /* Add cursor pointer to indicate clickable */
 }
 .avatar-wrapper .twitch-link:hover {
   transform: none !important;
   filter: none !important;
+}
+
+/* Keep the image itself non-interactive for hoverzoom */
+.avatar-wrapper .twitch-link img {
+  pointer-events: none;
+}
+
+/* Add this rule to prevent hoverzoom on specific images */
+img[src*="mnkwayplop"],
+img[src*="twitchon"],
+img[src*="twitchoff"] {
+  pointer-events: none;
+}
+
+/* Make sure the link itself still remains clickable */
+.avatar-wrapper .twitch-link {
+  pointer-events: auto;
+}
+
+/* Add hover effect for the Mnkway text */
+.username .twitch-link {
+    transition: color 0.2s ease;
+}
+
+.username .twitch-link:hover {
+    color: #000080;  /* Windows XP blue color to match the theme */
 }
