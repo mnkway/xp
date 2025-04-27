@@ -155,8 +155,8 @@ setInterval(loadStatus, 60_000);
 avatarWrapper.addEventListener('mouseenter', ()=>{
   const isOnline = profileEl.classList.contains('online');
   avatarImg.src = isOnline
-    ? '/images/twitchon.png'
-    : '/images/twitchoff.png';
+    ? 'images/twitchon.jpg'
+    : 'images/twitchoff.jpg';
 });
 avatarWrapper.addEventListener('mouseleave', ()=>{
   avatarImg.src = defaultAvatar;
