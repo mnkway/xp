@@ -329,10 +329,10 @@ body{font-family:Tahoma, Geneva, sans-serif;
   filter: brightness(1.2);
 }
 
-/* ─── 3) “En Stream” green background + white text ─── */
+/* ─── 3) “En Stream” RED background + white text ─── */
 .profile.online .msn-status {
-  background: #99ec52;
-  border-color: #99ec52;
+  background: #e81123;                    // ANCIENNEMENT #99ec52
+  border-color: #e81123;                  // ANCIENNEMENT #99ec52
 }
 
 .profile.online .msn-status span {
