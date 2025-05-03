@@ -11,6 +11,7 @@ const gameSlugs = [
   'Zelda_Skyward_Sword',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
+  'Metal_Gear_Solid_V',
   'Metal_Gear_Solid_3',
   'Metal_Gear_Solid_2',
   'Metal_Gear_Solid_1',
