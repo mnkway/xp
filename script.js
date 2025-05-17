@@ -18,6 +18,12 @@ const gameSlugs = [
   'Metal_Gear_Solid_2',
   'Metal_Gear_Solid_1',
   'Shenmue_I_et_II',
+  /*'Devil_May_Cry',
+  'Devil_May_Cry_2',
+  'Devil_May_Cry_3',
+  'Devil_May_Cry_4',
+  'Devil_May_Cry_5',
+  */
 ];
 
 /* ──────────────────────────────────────────
