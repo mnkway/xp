@@ -2,6 +2,8 @@ let zTop = 1000;
 
 /* ─────────────── Jeux list ─────────────── */
 const gameSlugs = [
+  'Resident_Evil_3',
+  'Resident_Evil_2',
   'Ico',
   'Resident_Evil_0',
   'Resident_Evil',
