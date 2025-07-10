@@ -15,6 +15,9 @@ const gameSlugs = [
   'Zelda_Skyward_Sword',
   "Zelda_Majora's_Mask",
   'Zelda_Ocarina_of_Time',
+  'Devil_May_Cry_5',
+  'Devil_May_Cry_4',
+  'Devil_May_Cry_3',
   'Metal_Gear_Solid_V',
   'Metal_Gear_Solid_3',
   'Metal_Gear_Solid_2',
@@ -22,9 +25,8 @@ const gameSlugs = [
   'Shenmue_I_et_II',
   /*'Devil_May_Cry',
   'Devil_May_Cry_2',
-  'Devil_May_Cry_3',
-  'Devil_May_Cry_4',
-  'Devil_May_Cry_5',
+  
+  
   */
 ];
 
