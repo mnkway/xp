@@ -2,7 +2,7 @@ let zTop = 1000;
 
 /* ─────────────── Jeux list ─────────────── */
 const gameSlugs = [
-  'Xanadu_Next',
+  "Xanadu_Next",
   'Resident_Evil_Revelations',
   'Resident_Evil_4',
   'Resident_Evil_3',
