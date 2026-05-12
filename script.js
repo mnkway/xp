@@ -4,6 +4,7 @@ let zTop = 1000;
 const gameSlugs = [
   "Xanadu_Next",
   'Bloodborne',
+  'Castlevania_Symphony_Of_The_Night',
   'Resident_Evil_Revelations',
   'Resident_Evil_4',
   'Resident_Evil_3',
