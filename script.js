@@ -2,6 +2,7 @@ let zTop = 1000;
 
 /* ─────────────── Jeux list ─────────────── */
 const gameSlugs = [
+  "Demon's_Souls",
   "Xanadu_Next",
   'Bloodborne',
   'Castlevania_Symphony_Of_The_Night',
